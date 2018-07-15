@@ -1,0 +1,150 @@
+# Translation for the Email Notification plugin for Omeka.
+# Copyright (C) 2018 Daniele Binaghi
+# This file is distributed under the same license as the Omeka package.
+# Daniele Binaghi <admin@bitoteko.it>, 2018
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Email Notification\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2018-05-08 11:54+0200\n"
+"PO-Revision-Date: 2018-05-08 12:06+0200\n"
+"Last-Translator: Daniele Binaghi <admin@bitoteko.it>\n"
+"Language-Team: Italian\n"
+"Language: it\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#: EmailNotificationPlugin.php:18
+msgid "New Item added"
+msgstr "Nuovo elemento aggiunto"
+
+#: EmailNotificationPlugin.php:19
+msgid "A new Item has been added to the Omeka repository."
+msgstr "Un nuovo elemento è stato aggiunto all'archivio Omeka."
+
+#: EmailNotificationPlugin.php:20
+msgid "New Collection added"
+msgstr "Nuova collezione aggiunta"
+
+#: EmailNotificationPlugin.php:21
+msgid "A new Collection has been added to the Omeka repository."
+msgstr "Una nuova collezione è stata aggiunta all'archivio Omeka."
+
+#: EmailNotificationPlugin.php:22
+msgid "Admin/editors have been notified about the new addition."
+msgstr "È stata inviata una notifica sulla nuova aggiunta a amministratore/redattori"
+
+#: EmailNotificationPlugin.php:123
+msgid "The title of the new Item, added by <b>%s</b>,"
+msgstr "Il titolo del nuovo elemento, aggiunto da <b>%s</b>,"
+
+#: EmailNotificationPlugin.php:123
+msgid "is <b>%s</b>."
+msgstr "è <b>%s</b>."
+
+#: EmailNotificationPlugin.php:123
+msgid "The status of the new Item is <b>%s</b>"
+msgstr "Lo stato del nuovo elemento è <b>%s</b>"
+
+#: EmailNotificationPlugin.php:123
+msgid "Please check that all data are correct!"
+msgstr "Per favore, verifica che tutti i dati siano corretti!"
+
+#: EmailNotificationPlugin.php:123
+msgid "public"
+msgstr "pubblico"
+
+#: EmailNotificationPlugin.php:123
+msgid "private"
+msgstr "privato"
+
+#: EmailNotificationPlugin.php:125
+msgid "The new Item, added by <b>%s</b>, does not have a title yet."
+msgstr "Il nuovo elemento, aggiunto da <b>%s</b>, non ha ancora un titolo."
+
+#: EmailNotificationPlugin.php:126
+msgid "No title has been provided for the new Item."
+msgstr "Non è stato fornito alcun titolo per il nuovo elemento."
+
+#: EmailNotificationPlugin.php:138
+msgid "The title of the new Collection, added by <b>%s</b>,"
+msgstr "Il titolo della nuova collezione, aggiunta da <b>%s</b>,"
+
+#: EmailNotificationPlugin.php:138
+msgid "The status of the new Collection is <b>%s</b>"
+msgstr "Lo stato della nuova collezione è <b>%s</b>"
+
+#: EmailNotificationPlugin.php:140
+msgid "The new Collection, added by <b>%s</b>, does not have a title yet."
+msgstr "La nuova collezione, aggiunta da <b>%s</b>, non ha ancora un titolo."
+
+#: EmailNotificationPlugin.php:141
+msgid "No title has been provided for the new Collection."
+msgstr "Non è stato fornito alcun titolo per la nuova collezione."
+
+#: config_form:23
+msgid "New Item addition"
+msgstr "Nuovo elemento aggiunto"
+
+#: config_form:27
+msgid "Enable notification"
+msgstr "Abilita le notifiche"
+
+#: config_form:31
+msgid "If checked, sends a notification every time a new Item is added."
+msgstr "Se selezionato, fa inviare una notifica ogni volta che un nuovo elemento viene aggiunto."
+
+#: config_form:39
+msgid "E-mail subject"
+msgstr "Oggetto dell'e-mail"
+
+#: config_form:43
+msgid "The subject line for the notification e-mail sent to the recipients."
+msgstr "L'oggetto dell'e-mail di notifica inviata ai destinatari."
+
+#: config_form:51
+msgid "E-mail message"
+msgstr "Messaggio e-mail"
+
+#: config_form:55
+msgid "The beginning of the notification message sent to the recipients."
+msgstr "L'inizio del messaggio di notifica inviato ai destinatari."
+
+#: config_form:61
+msgid "New Collection addition"
+msgstr "Nuova collezione aggiunta"
+
+#: config_form:69
+msgid "If checked, sends a notification every time a new Collection is added."
+msgstr "Se selezionato, fa inviare una notifica ogni volta che una nuova collezione viene aggiunta."
+
+#: config_form:99
+msgid "Recipients"
+msgstr "Destinatari"
+
+#: config_form:103
+msgid "Recipient e-mail address"
+msgstr "Indirizzo e-mail del destinatario"
+
+#: config_form:107
+msgid "The address that will receive the notification."
+msgstr "L'indirizzo che riceverà le notifiche."
+
+#: config_form:115
+msgid "Notify editors"
+msgstr "Informa i redattori"
+
+#: config_form:119
+msgid "If checked, system sends a notification of new submissions also to users with editing role."
+msgstr "Se selezionato, il sistema invia una notifica per le nuove aggiunte anche agli utenti con ruolo di redattore."
+
+#: config_form:125
+msgid "Alerts"
+msgstr "Avvisi"
+
+#: config_form:133
+msgid "If checked, system shows an alert informing contributor about the notification."
+msgstr "Se selezionato, il sistema mostra un avviso che informa il contributore dell'invio delle notifiche."
