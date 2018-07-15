@@ -8,15 +8,15 @@ jQuery(document).ready(function () {
 </script>
 
 <?php
-$new_item						= get_option('email_notification_new_item');
-$new_item_email_subject			= get_option('email_notification_new_item_email_subject');
-$new_item_email_message 		= get_option('email_notification_new_item_email_message');
-$new_collection					= get_option('email_notification_new_collection');	
+$new_item			= get_option('email_notification_new_item');
+$new_item_email_subject		= get_option('email_notification_new_item_email_subject');
+$new_item_email_message 	= get_option('email_notification_new_item_email_message');
+$new_collection			= get_option('email_notification_new_collection');	
 $new_collection_email_subject	= get_option('email_notification_new_collection_email_subject');
 $new_collection_email_message 	= get_option('email_notification_new_collection_email_message');
-$recipient_address				= get_option('email_notification_recipient_address');
-$notify_editors					= get_option('email_notification_notify_editors');
-$message_sent					= get_option('email_notification_message_sent');
+$recipient_address		= get_option('email_notification_recipient_address');
+$notify_editors			= get_option('email_notification_notify_editors');
+$message_sent			= get_option('email_notification_message_sent');
 $view = get_view();
 ?>
 
