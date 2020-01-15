@@ -2,7 +2,7 @@
 
 /**
  * @version $Id$
- * @license http://www.gnu.org/licenses/gpl-3.0.txt
+ * @license CeCILL v2.1
  * @copyright Daniele Binaghi, 2018-2019
  * @package EmailNotification
  */
