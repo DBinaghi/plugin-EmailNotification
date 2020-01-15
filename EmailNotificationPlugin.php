@@ -3,10 +3,11 @@
 /**
  * @version $Id$
  * @license http://www.gnu.org/licenses/gpl-3.0.txt
- * @copyright Daniele Binaghi, 2018
+ * @copyright Daniele Binaghi, 2018-2019
  * @package EmailNotification
  */
 
+ 
 // Define Constants
 define('EMAIL_NOTIFICATION_NEW_ITEM_EMAIL_SUBJECT', __('New Item added'));
 define('EMAIL_NOTIFICATION_NEW_ITEM_EMAIL_MESSAGE', __('A new Item has been added to the Omeka repository.'));
@@ -28,13 +29,13 @@ class EmailNotificationPlugin extends Omeka_Plugin_AbstractPlugin
 
 	public function hookInstall()
 	{
-		set_option('email_notification_new_item', '0');    
+		set_option('email_notification_new_item', '0');	
 		set_option('email_notification_new_item_email_subject', EMAIL_NOTIFICATION_NEW_ITEM_EMAIL_SUBJECT);
 		set_option('email_notification_new_item_email_message', EMAIL_NOTIFICATION_NEW_ITEM_EMAIL_MESSAGE);
-		set_option('email_notification_new_collection', '0');    
+		set_option('email_notification_new_collection', '0');
 		set_option('email_notification_new_collection_email_subject', EMAIL_NOTIFICATION_NEW_COLLECTION_EMAIL_SUBJECT);
 		set_option('email_notification_new_collection_email_message', EMAIL_NOTIFICATION_NEW_COLLECTION_EMAIL_MESSAGE);
-		set_option('email_notification_recipient_address', get_option('administrator_email'));    
+		set_option('email_notification_recipient_address', get_option('administrator_email'));
 		set_option('email_notification_notify_editors', '0');
 		set_option('email_notification_message_sent', '0');
 	}
@@ -48,49 +49,51 @@ class EmailNotificationPlugin extends Omeka_Plugin_AbstractPlugin
 		delete_option('email_notification_new_collection_email_subject');
 		delete_option('email_notification_new_collection_email_message');
 		delete_option('email_notification_recipient_address');
-		delete_option('email_notification_notify_editors');    
+		delete_option('email_notification_notify_editors');
 		delete_option('email_notification_message_sent');
-	}
+	 }
 
-    	public function hookInitialize()
-    	{
-        	add_translation_source(dirname(__FILE__) . '/languages');
-    	}
+	public function hookInitialize()
+	{
+		add_translation_source(dirname(__FILE__) . '/languages');
+	}
 	
-    	public function hookConfig($args)
-    	{
-        	$post = $args['post'];
+	public function hookConfig($args)
+	{
+		$post = $args['post'];
 		set_option('email_notification_new_item', $post['email_notification_new_item']);
-		set_option('email_notification_new_item_email_subject',  $post['email_notification_new_item_email_subject']);
-		set_option('email_notification_new_item_email_message',  $post['email_notification_new_item_email_message']);
-		set_option('email_notification_new_collection',  $post['email_notification_new_collection']);
-		set_option('email_notification_new_collection_email_subject',  $post['email_notification_new_collection_email_subject']);
-		set_option('email_notification_new_collection_email_message',  $post['email_notification_new_collection_email_message']);
-		set_option('email_notification_recipient_address',  $post['email_notification_recipient_address']);
-        	set_option('email_notification_notify_editors', $post['email_notification_notify_editors']);
+		set_option('email_notification_new_item_email_subject', $post['email_notification_new_item_email_subject']);
+		set_option('email_notification_new_item_email_message', $post['email_notification_new_item_email_message']);
+		set_option('email_notification_new_collection', $post['email_notification_new_collection']);
+		set_option('email_notification_new_collection_email_subject', $post['email_notification_new_collection_email_subject']);
+		set_option('email_notification_new_collection_email_message', $post['email_notification_new_collection_email_message']);
+		set_option('email_notification_recipient_address', $post['email_notification_recipient_address']);
+		set_option('email_notification_notify_editors', $post['email_notification_notify_editors']);
 		set_option('email_notification_message_sent', $post['email_notification_message_sent']);
-    	}
+	}
 	
-    	public function hookConfigForm()
-    	{
-        	include 'config_form.php';
+	public function hookConfigForm()
+	{
+		include 'config_form.php';
 	}
 	
 	public function hookAfterSaveItem($args)
-    	{
+	{
 		if (!$args['post'] || $args['insert'] != 1) {
 			return;
 		}
-        	$recordId = $args['record']['id'];
+		$recordId = $args['record']['id'];
+		
 		$this->sendNotification('item', $recordId);
-    	}
+	}
 
 	public function hookAfterSaveCollection($args)
-    	{
+	{
 		if (!$args['post'] || $args['insert'] != 1) {
 			return;
 		}
-        	$recordId = $args['record']['id'];
+		$recordId = $args['record']['id'];
+
 		$this->sendNotification('collection', $recordId);
 	}
 
@@ -100,6 +103,7 @@ class EmailNotificationPlugin extends Omeka_Plugin_AbstractPlugin
 		$bodyHtml = '';
 		$subject = '';
 		$bMessageSent = false;
+
 		
 		if ($recipientAddress != '' || $notifyEditors) {
 			// creates e-mail elements
@@ -110,9 +114,13 @@ class EmailNotificationPlugin extends Omeka_Plugin_AbstractPlugin
 				$adder = current_user()->name;
 				$status = ($O_R_AR->public == 1 ? __('public') : __('private'));
 				if ($title != '') {
-					$bodyHtml .= '<p>' . __('The title of the new Item, added by <b>%s</b>,' , $adder) . ' ' . __('is <b>%s</b>.', $title) . '</p><p>' .  __('The status of the new Item is <b>%s</b>', $status) . '.</p><p><a href="' . $_SERVER['HTTP_HOST'] . '/admin/items/show/id/' . $recordId . '">' . __('Please check that all data are correct!') . '</a></p>';
+					$bodyHtml .= '<p>' . __('The title of the new Item, added by <b>%s</b>, is <b>%s</b>' , $adder, $title) . '.</p>';
+					$bodyHtml .= '<p>' . __('The status of the new Item is <b>%s</b>', $status) . '.</p>';
+					$bodyHtml .= '<p>' . __('Please check that all data are correct, by clicking') . ' <a href="' . $_SERVER['HTTP_HOST'] . '/admin/items/show/id/' . $recordId . '">' . __('this link') . '</a>.</p>';
 				} else {
-					$bodyHtml .= '<p>' . __('The new Item, added by <b>%s</b>, does not have a title yet.', $adder) . '</p><p>' .  __('The status of the new Item is <b>%s</b>', $status) . '.</p><p><a href="' . $_SERVER['HTTP_HOST'] . '/admin/items/show/id/' . $recordId . '">' . __('Please check that all data are correct!') . '</a></p>';
+					$bodyHtml .= '<p>' . __('The new Item, added by <b>%s</b>, does not have a title yet', $adder) . '.</p>';
+					$bodyHtml .= '<p>' . __('The status of the new Item is <b>%s</b>', $status) . '.</p>';
+					$bodyHtml .= '<p>' . __('Please check that all data are correct, by clicking') . ' <a href="' . $_SERVER['HTTP_HOST'] . '/admin/items/show/id/' . $recordId . '">' . __('this link') . '</a>.</p>';
 					$message = __('No title has been provided for the new Item.');
 					$flash = Zend_Controller_Action_HelperBroker::getStaticHelper('FlashMessenger');
 					$flash->addMessage($message, 'error');
@@ -125,9 +133,13 @@ class EmailNotificationPlugin extends Omeka_Plugin_AbstractPlugin
 				$adder = current_user()->name;
 				$status = ($O_R_AR->public == 1 ? __('public') : __('private'));
 				if ($title != '') {
-					$bodyHtml .= '<p>' . __('The title of the new Collection, added by <b>%s</b>,', $adder) . ' ' . __('is <b>%s</b>.', $title) . '</p><p>' . __('The status of the new Collection is <b>%s</b>', $status) . '.</p><p><a href="' . $_SERVER['HTTP_HOST'] . '/admin/collections/show/id/' . $recordId . '">' . __('Please check that all data are correct!') . '</a></p>';
+					$bodyHtml .= '<p>' . __('The title of the new Collection, added by <b>%s</b>, is <b>%s</b>', $adder, $title) . '.</p>';
+					$bodyHtml .= '<p>' . __('The status of the new Collection is <b>%s</b>', $status) . '.</p>';
+					$bodyHtml .= '<p>' . __('Please check that all data are correct, by clicking') . ' <a href="' . $_SERVER['HTTP_HOST'] . '/admin/items/show/id/' . $recordId . '">' . __('this link') . '</a>.</p>';
 				} else {
-					$bodyHtml .= '<p>' . __('The new Collection, added by <b>%s</b>, does not have a title yet.', $adder) . '</p><p>' .  __('The status of the new Collection is <b>%s</b>', $status) . '.</p><p><a href="' . $_SERVER['HTTP_HOST'] . '/admin/items/show/id/' . $recordId . '">' . __('Please check that all data are correct!') . '</a></p>';
+					$bodyHtml .= '<p>' . __('The new Collection, added by <b>%s</b>, does not have a title yet', $adder) . '.</p>';
+					$bodyHtml .= '<p>' . __('The status of the new Collection is <b>%s</b>', $status) . '.</p>';
+					$bodyHtml .= '<p>' . __('Please check that all data are correct, by clicking') . ' <a href="' . $_SERVER['HTTP_HOST'] . '/admin/items/show/id/' . $recordId . '">' . __('this link') . '</a>.</p>';
 					$message = __('No title has been provided for the new Collection.');
 					$flash = Zend_Controller_Action_HelperBroker::getStaticHelper('FlashMessenger');
 					$flash->addMessage($message, 'error');
