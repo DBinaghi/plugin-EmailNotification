@@ -30,4 +30,4 @@ In this respect, the risks associated with loading, using, modifying and/or deve
 Copyright Daniele Binaghi, 2018-2019
 
 ## Acknowledgments
-Many thanks to John Flatness and Patrick Murray-John for their help in sorting out user privileges (forum.omeka.org/t/new-plugin-help-needed-with-users-list-and-permission/6020).
+Many thanks to John Flatness and Patrick Murray-John for their <a href="https://forum.omeka.org/t/new-plugin-help-needed-with-users-list-and-permission/6020" target="_blank">help in sorting out user privileges</a>.
