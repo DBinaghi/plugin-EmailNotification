@@ -1,4 +1,4 @@
-# Send Notification
+# Email Notification
 
 ## Description
 
@@ -17,7 +17,7 @@ Use it at your own risk.
 It’s always recommended to backup your files and your databases and to check your archives regularly so you can roll back if needed.
 
 ## Troubleshooting
-See online issues on the <a href="https://github.com/DBinaghi/plugin-SendNotification/issues" target="_blank">plugin issues</a> page on GitHub.
+See online issues on the <a href="https://github.com/DBinaghi/plugin-EmailNotification/issues" target="_blank">plugin issues</a> page on GitHub.
 
 ## License
 This plugin is published under the <a href="https://www.cecill.info/licences/Licence_CeCILL_V2.1-en.html" target="_blank">CeCILL v2.1</a> licence, compatible with <a href="https://www.gnu.org/licenses/gpl-3.0.html" target="_blank">GNU/GPL</a> and approved by <a href="https://www.fsf.org/" target="_blank">FSF</a> and <a href="http://opensource.org/" target="_blank">OSI</a>.
