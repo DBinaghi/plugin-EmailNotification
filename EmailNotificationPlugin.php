@@ -135,11 +135,11 @@ class EmailNotificationPlugin extends Omeka_Plugin_AbstractPlugin
 				if ($title != '') {
 					$bodyHtml .= '<p>' . __('The title of the new Collection, added by <b>%s</b>, is <b>%s</b>', $adder, $title) . '.</p>';
 					$bodyHtml .= '<p>' . __('The status of the new Collection is <b>%s</b>', $status) . '.</p>';
-					$bodyHtml .= '<p>' . __('Please check that all data are correct, by clicking') . ' <a href="' . $_SERVER['HTTP_HOST'] . '/admin/items/show/id/' . $recordId . '">' . __('this link') . '</a>.</p>';
+					$bodyHtml .= '<p>' . __('Please check that all data are correct, by clicking') . ' <a href="' . $_SERVER['HTTP_HOST'] . '/admin/collections/show/id/' . $recordId . '">' . __('this link') . '</a>.</p>';
 				} else {
 					$bodyHtml .= '<p>' . __('The new Collection, added by <b>%s</b>, does not have a title yet', $adder) . '.</p>';
 					$bodyHtml .= '<p>' . __('The status of the new Collection is <b>%s</b>', $status) . '.</p>';
-					$bodyHtml .= '<p>' . __('Please check that all data are correct, by clicking') . ' <a href="' . $_SERVER['HTTP_HOST'] . '/admin/items/show/id/' . $recordId . '">' . __('this link') . '</a>.</p>';
+					$bodyHtml .= '<p>' . __('Please check that all data are correct, by clicking') . ' <a href="' . $_SERVER['HTTP_HOST'] . '/admin/collections/show/id/' . $recordId . '">' . __('this link') . '</a>.</p>';
 					$message = __('No title has been provided for the new Collection.');
 					$flash = Zend_Controller_Action_HelperBroker::getStaticHelper('FlashMessenger');
 					$flash->addMessage($message, 'error');
