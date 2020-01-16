@@ -7,7 +7,7 @@ Plugin for Omeka Classic. Once installed and active, system notifies specific re
 Settings allow to choose who is receiving the notification, to customize the messages sent and whether the system should display information about the notification also for the user who just added the new Item and/or Collection.
 
 ## Installation
-Uncompress files and rename plugin folder "SendNotification".
+Uncompress files and rename plugin folder "EmailNotification".
 
 Then install it like any other Omeka plugin.
 
