@@ -13,7 +13,8 @@ Then install it like any other Omeka plugin.
 
 ## Customizing messages
 Starting from versione 1.3, it's possible to customize the whole message sent to recipient, by using special fields like <b>{item_title}</b> or <b>{collection_public_status}</b>; fields will be substituted by their actual values when sending the notification.
-For instance, if Item "Juliet and Romeo" was added by "John Doe" contributor, the text "A new Item was added by {item_creator} with the title '{item_title}'" would be sent as "A new Item was added by John Doe with the title 'Juliet and Romeo'".
+
+For instance, if Item "Juliet and Romeo" was added by "John Doe" contributor, the text "A new Item was added by {item_creator} with the title '{item_title}'" would be sent out as "A new Item was added by John Doe with the title 'Juliet and Romeo'".
 
 ## Warning
 Use it at your own risk.
