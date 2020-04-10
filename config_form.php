@@ -1,10 +1,10 @@
 <?php echo js_tag('vendor/tinymce/tinymce.min'); ?>
 <script type="text/javascript">
-jQuery(document).ready(function () {
-	Omeka.wysiwyg({
-		selector: '.html-editor'
+	jQuery(document).ready(function () {
+		Omeka.wysiwyg({
+			selector: '.html-editor'
+		});
 	});
-});
 </script>
 
 <?php
@@ -43,7 +43,7 @@ $view = get_view();
 	</div>
 	<div class="inputs five columns omega">
 		<p class="explanation">
-			<?php echo __('The subject line for the notification e-mail sent to the recipients.'); ?>
+			<?php echo __('The subject line for the notification e-mail sent to recipients.'); ?>
 		</p>
 		<?php echo $view->formText('email_notification_new_item_email_subject', $new_item_email_subject); ?>
 	</div>
@@ -55,7 +55,7 @@ $view = get_view();
 	</div>
 	<div class="inputs five columns omega">
 		<p class="explanation">
-			<?php echo __('The beginning of the notification message sent to the recipients.') ?>
+			<?php echo __('The notification message to be sent to recipients. User can insert any of the following fields (within curly braces) in the text, as many times as they want; they will be substituted by the actual values when the message is sent: %s', '<b>{item_title}</b>, <b>{item_creator}</b>, <b>{item_creation_date}</b>, <b>{item_collection_title}</b>, <b>{item_public_status}</b>, <b>{item_featured_status}</b>, <b>{item_admin_url}</b>, <b>{item_public_url}</b>') ?>
 		</p>
 		<?php echo $view->formTextarea('email_notification_new_item_email_message', $new_item_email_message, array('rows' => '10', 'cols' => '60', 'class' => array('html-editor'))); ?>
 	</div>
@@ -83,7 +83,7 @@ $view = get_view();
 	</div>
 	<div class="inputs five columns omega">
 		<p class="explanation">
-			<?php echo __('The subject line for the notification e-mail sent to the recipients.'); ?>
+			<?php echo __('The subject line for the notification e-mail to be sent to recipients.'); ?>
 		</p>
 		<?php echo $view->formText('email_notification_new_collection_email_subject', $new_collection_email_subject); ?>
 	</div>
@@ -95,7 +95,7 @@ $view = get_view();
 	</div>
 	<div class="inputs five columns omega">
 		<p class="explanation">
-			<?php echo __('The beginning of the notification message sent to the recipients.'); ?>
+			<?php echo __('The notification message to be sent to recipients. User can insert any of the following fields (within curly braces) in the text, as many times as they want; they will be substituted by the actual values when the message is sent: %s', '<b>{collection_title}</b>, <b>{collection_creator}</b>, <b>{collection_creation_date}</b>, <b>{collection_public_status}</b>, <b>{collection_featured_status}</b>, <b>{collection_admin_url}</b>, <b>{collection_public_url}</b>'); ?>
 		</p>
 		<?php echo $view->formTextarea('email_notification_new_collection_email_message', $new_collection_email_message, array('rows' => '10', 'cols' => '60', 'class' => array('html-editor'))); ?>
 	</div>
@@ -124,7 +124,7 @@ $view = get_view();
 	</div>
 	<div class="inputs five columns omega">
 		<p class="explanation">
-			<?php echo __('The subject line for the notification e-mail sent to the recipients.'); ?>
+			<?php echo __('The subject line for the notification e-mail sent to recipients.'); ?>
 		</p>
 		<?php echo $view->formText('email_notification_new_exhibit_email_subject', $new_exhibit_email_subject); ?>
 	</div>
@@ -136,7 +136,7 @@ $view = get_view();
 	</div>
 	<div class="inputs five columns omega">
 		<p class="explanation">
-			<?php echo __('The beginning of the notification message sent to the recipients.') ?>
+			<?php echo __('The notification message to be sent to recipients. User can insert any of the following fields (within curly braces) in the text, as many times as they want; they will be substituted by the actual values when the message is sent: %s', '<b>{exhibit_title}</b>, <b>{exhibit_creator}</b>, <b>{exhibit_creation_date}</b>, <b>{exhibit_public_status}</b>, <b>{exhibit_featured_status}</b>, <b>{exhibit_admin_url}</b>, <b>{exhibit_public_url}</b>') ?>
 		</p>
 		<?php echo $view->formTextarea('email_notification_new_exhibit_email_message', $new_exhibit_email_message, array('rows' => '10', 'cols' => '60', 'class' => array('html-editor'))); ?>
 	</div>
@@ -160,13 +160,13 @@ $view = get_view();
 
 <div class="field">
 	<div class="two columns alpha">
-		<?php echo $view->formLabel('email_notification_recipient_address', __('Recipient e-mail address')); ?>
+		<?php echo $view->formLabel('email_notification_recipient_address', __('Recipient e-mail address(es)')); ?>
 	</div>
 	<div class="inputs five columns omega">
 		<p class="explanation">
-			<?php echo __('The address that will receive the notification.'); ?>
+			<?php echo __('The address(es) that will receive the notification. Multiple addresses must be separated by a comma (,).'); ?>
 		</p>
-		<?php echo $view->formText('email_notification_recipient_address', $recipient_address); ?>
+		<?php echo $view->formInput('email_notification_recipient_address', $recipient_address, array('type'=>'email','multiple'=>'multiple')); ?>
 	</div>
 </div>
 
@@ -186,7 +186,7 @@ $view = get_view();
 
 <div class="field">
 	<div class="two columns alpha">
-		<?php echo $view->formLabel('email_notification_message_sent', __('Alert contributor about notification')); ?>
+		<?php echo $view->formLabel('email_notification_message_sent', __('Alert contributor')); ?>
 	</div>
 	<div class="inputs five columns omega">
 		<p class="explanation">
