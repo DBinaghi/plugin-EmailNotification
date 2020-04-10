@@ -123,57 +123,65 @@ class EmailNotificationPlugin extends Omeka_Plugin_AbstractPlugin
 		if ($recipientAddress != '' || $notifyEditors) {
 			// creates e-mail elements
 			$title = metadata($record, array('Dublin Core', 'Title'));
-			$owner = current_user()->name;
-			$status = ($record->public == 1 ? __('public') : __('private'));
+			$creator = current_user()->name;
+			$date = metadata($record, 'added');
+			$public = ($record->public == 1 ? __('public') : __('private'));
+			$featured = ($record->featured == 1 ? __('is featured') : __('is not featured'));
 			
 			if ($type == 'item' && get_option('email_notification_new_item')) {
 				$subject =  get_option('email_notification_new_item_email_subject');
 				$bodyHtml = get_option('email_notification_new_item_email_message');
-				if ($title != '') {
-					$bodyHtml .= '<p>' . __('The title of the new Item, added by <b>%s</b>, is <b>%s</b>' , $owner, $title) . '.</p>';
-				} else {
-					$bodyHtml .= '<p>' . __('The new Item, added by <b>%s</b>, does not have a title yet', $owner) . '.</p>';
+				$url_admin = $_SERVER['HTTP_HOST'] . '/admin/items/show/id/' . $record['id'];
+				$url_public = $_SERVER['HTTP_HOST'] . '/items/show/id' . $record['id'];
+				$collection_title = metadata($record, 'Collection Name');
+				if ($title == '') {
+					$title = __('not provided');
 					$message = __('No title has been provided for the new Item.');
 					$flash = Zend_Controller_Action_HelperBroker::getStaticHelper('FlashMessenger');
 					$flash->addMessage($message, 'error');
 				}
-				$bodyHtml .= '<p>' . __('The status of the new Item is <b>%s</b>', $status) . '.</p>';
-				$bodyHtml .= '<p>' . __('Please check that all relevant data have been supplied and are correct by following') . ' <a href="' . $_SERVER['HTTP_HOST'] . '/admin/items/show/id/' . $record['id'] . '">' . __('this link') . '</a>.</p>';
+				$fields = array('{item_title}', '{item_creator}', '{item_creation_date}', '{item_collection_title}', '{item_public_status}', '{item_featured_status}', '{item_admin_url}', '{item_public_url}');
+				$values = array($title, $creator, $date, $collection_title, $public, $featured, $url_admin, $url_public);
+				$bodyHtml = str_replace($fields, $values, $bodyHtml);
 			} elseif ($type == 'collection' && get_option('email_notification_new_collection')) {	
 				$subject =  get_option('email_notification_new_collection_email_subject');
 				$bodyHtml = get_option('email_notification_new_collection_email_message');
-				if ($title != '') {
-					$bodyHtml .= '<p>' . __('The title of the new Collection, added by <b>%s</b>, is <b>%s</b>' , $owner, $title) . '.</p>';
-				} else {
-					$bodyHtml .= '<p>' . __('The new Collection, added by <b>%s</b>, does not have a title yet', $owner) . '.</p>';
+				$url_admin = $_SERVER['HTTP_HOST'] . '/admin/collections/show/id/' . $record['id'];
+				$url_public = $_SERVER['HTTP_HOST'] . '/collections/show/id' . $record['id'];
+				if ($title == '') {
+					$title = __('not provided');
 					$message = __('No title has been provided for the new Collection.');
 					$flash = Zend_Controller_Action_HelperBroker::getStaticHelper('FlashMessenger');
 					$flash->addMessage($message, 'error');
 				}
-				$bodyHtml .= '<p>' . __('The status of the new Collection is <b>%s</b>', $status) . '.</p>';
-				$bodyHtml .= '<p>' . __('Please check that all relevant data have been supplied and are correct by following') . ' <a href="' . $_SERVER['HTTP_HOST'] . '/admin/collections/show/id/' . $record['id'] . '">' . __('this link') . '</a>.</p>';
+				$fields = array('{collection_title}', '{collection_creator}', '{collection_creation_date}', '{collection_public_status}', '{collection_featured_status}', '{collection_admin_url}', '{collection_public_url}');
+				$values = array($title, $creator, $date, $public, $featured, $url_admin, $url_public);
+				$bodyHtml = str_replace($fields, $values, $bodyHtml);
 			} elseif ($type == 'exhibit' && get_option('email_notification_new_exhibit') && plugin_is_active('ExhibitBuilder')) {
 				$subject =  get_option('email_notification_new_exhibit_email_subject');
 				$bodyHtml = get_option('email_notification_new_exhibit_email_message');
-				if ($title != '') {
-					$bodyHtml .= '<p>' . __('The title of the new Exhibit, added by <b>%s</b>, is <b>%s</b>' , $owner, $title) . '.</p>';
-				} else {
-					$bodyHtml .= '<p>' . __('The new Exhibit, added by <b>%s</b>, does not have a title yet', $owner) . '.</p>';
+				$url_admin = $_SERVER['HTTP_HOST'] . '/admin/exhibits/show/id/' . $record['id'];
+				$url_public = $_SERVER['HTTP_HOST'] . '/exhibits/show/id' . $record['id'];
+				if ($title == '') {
+					$title = __('not provided');
 					$message = __('No title has been provided for the new Exhibit.');
 					$flash = Zend_Controller_Action_HelperBroker::getStaticHelper('FlashMessenger');
 					$flash->addMessage($message, 'error');
 				}
-				$bodyHtml .= '<p>' . __('The status of the new Exhibit is <b>%s</b>', $status) . '.</p>';
-				$bodyHtml .= '<p>' . __('Please check that all relevant data have been supplied and are correct by following') . ' <a href="' . $_SERVER['HTTP_HOST'] . '/admin/exhibits/show/id/' . $record['id'] . '">' . __('this link') . '</a>.</p>';
+				$fields = array('{exhibit_title}', '{exhibit_creator}', '{exhibit_creation_date}', '{exhibit_public_status}', '{exhibit_featured_status}', '{exhibit_admin_url}', '{exhibit_public_url}');
+				$values = array($title, $creator, $date, $public, $featured, $url_admin, $url_public);
+				$bodyHtml = str_replace($fields, $values, $bodyHtml);
 			}
 			
 			if ($bodyHtml != '' && $subject != '') {
+				$bodyHtml .= '<hr>' . __('This is an automatically generated message - please do not reply directly to this e-mail');
 				if ($recipientAddress != '') {
-					// sends e-mail to recipient address
+					$recipientAddresses = explode(',', $recipientAddress);
+					// sends e-mail to recipient address(es)
 					$email = new Zend_Mail('utf-8');
 					$email->setBodyHtml($bodyHtml);
 					$email->setFrom(get_option('administrator_email'));
-					$email->addTo($recipientAddress);
+					$email->addTo($recipientAddresses);
 					$email->setSubject($subject);
 					$email->send();
 					$bMessageSent = true;
