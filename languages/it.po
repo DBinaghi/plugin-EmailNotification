@@ -45,154 +45,134 @@ msgstr "Una nuova esposizione è stata aggiunta all'archivio Omeka."
 msgid "Admin/editors have been notified about the new addition."
 msgstr "È stata inviata una notifica sulla nuova aggiunta a amministratore/redattori."
 
-#: EmailNotificationPlugin.php:115
+#: EmailNotificationPlugin.php:128
 msgid "public"
 msgstr "pubblico"
 
-#: EmailNotificationPlugin.php:115
+#: EmailNotificationPlugin.php:128
 msgid "private"
 msgstr "privato"
 
-#: EmailNotificationPlugin.php:133
-msgid "The title of the new Item, added by <b>%s</b>, is <b>%s</b>"
-msgstr "Il titolo del nuovo documento, aggiunto da <b>%s</b>, è <b>%s</b>"
+#: EmailNotificationPlugin.php:129
+msgid "is featured"
+msgstr "è in evidenza"
 
-#: EmailNotificationPlugin.php:135
-msgid "The new Item, added by <b>%s</b>, does not have a title yet"
-msgstr "Il nuovo documento, aggiunto da <b>%s</b>, non ha ancora un titolo"
+#: EmailNotificationPlugin.php:129
+msgid "is not featured"
+msgstr "non è in evidenza"
 
-#: EmailNotificationPlugin.php:136
+#: EmailNotificationPlugin.php:138
+#: EmailNotificationPlugin.php:152
+#: EmailNotificationPlugin.php:166
+msgid "not provided"
+msgstr "non fornito"
+
+#: EmailNotificationPlugin.php:139
 msgid "No title has been provided for the new Item."
 msgstr "Non è stato fornito alcun titolo per il nuovo documento."
 
-#: EmailNotificationPlugin.php:140
-msgid "The status of the new Item is <b>%s</b>"
-msgstr "Lo stato del nuovo documento è <b>%s</b>"
-
-#: EmailNotificationPlugin.php:141
-#: EmailNotificationPlugin.php:154
-#: EmailNotificationPlugin.php:167
-msgid "Please check that all relevant data have been supplied and are correct by following"
-msgstr "Per favore, verifica che tutti i dati necessari siano stati forniti e siano corretti, seguendo"
-
-#: EmailNotificationPlugin.php:141
-#: EmailNotificationPlugin.php:154
-#: EmailNotificationPlugin.php:167
-msgid "this link"
-msgstr "questo collegamento"
-
-#: EmailNotificationPlugin.php:146
-msgid "The title of the new Collection, added by <b>%s</b>, is <b>%s</b>"
-msgstr "Il titolo della nuova collezione, aggiunta da <b>%s</b>, è <b>%s</b>"
-
-#: EmailNotificationPlugin.php:148
-msgid "The new Collection, added by <b>%s</b>, does not have a title yet"
-msgstr "La nuova collezione, aggiunta da <b>%s</b>, non ha ancora un titolo"
-
-#: EmailNotificationPlugin.php:149
+#: EmailNotificationPlugin.php:153
 msgid "No title has been provided for the new Collection."
 msgstr "Non è stato fornito alcun titolo per la nuova collezione."
 
-#: EmailNotificationPlugin.php:153
-msgid "The status of the new Collection is <b>%s</b>"
-msgstr "Lo stato della nuova collezione è <b>%s</b>"
-
-#: EmailNotificationPlugin.php:159
-msgid "The title of the new Exhibit, added by <b>%s</b>, is <b>%s</b>"
-msgstr "Il titolo della nuova esposizione, aggiunta da <b>%s</b>, è <b>%s</b>"
-
-#: EmailNotificationPlugin.php:161
-msgid "The new Exhibit, added by <b>%s</b>, does not have a title yet"
-msgstr "La nuova esposizione, aggiunta da <b>%s</b>, non ha ancora un titolo"
-
-#: EmailNotificationPlugin.php:162
+#: EmailNotificationPlugin.php:167
 msgid "No title has been provided for the new Exhibit."
 msgstr "Non è stato fornito alcun titolo per la nuova esposizione."
 
-#: EmailNotificationPlugin.php:166
-msgid "The status of the new Exhibit is <b>%s</b>"
-msgstr "Lo stato della nuova esposizione è <b>%s</b>"
+#: EmailNotificationPlugin.php:177
+msgid "This is an automatically generated message - please do not reply directly to this e-mail"
+msgstr "Questo è un messaggio generato automaticamente - si prega di non rispondere direttamente a questa e-mail"
 
-#: config_form:26
+#: config_form.php:26
 msgid "New Item addition"
 msgstr "Aggiunta nuovo documento"
 
-#: config_form:30
+#: config_form.php:30
 msgid "Enable notification"
 msgstr "Abilita le notifiche"
 
-#: config_form:34
+#: config_form.php:34
 msgid "If checked, sends a notification every time a new Item is added."
 msgstr "Se selezionato, fa inviare una notifica ogni volta che un nuovo documento viene aggiunto."
 
-#: config_form:42
+#: config_form.php:42
 msgid "E-mail subject"
 msgstr "Oggetto dell'e-mail"
 
-#: config_form:46
+#: config_form.php:46
+#: config_form.php:86
+#: config_form.php:127
 msgid "The subject line for the notification e-mail sent to the recipients."
 msgstr "L'oggetto dell'e-mail di notifica inviata ai destinatari."
 
-#: config_form:54
+#: config_form.php:54
 msgid "E-mail message"
 msgstr "Messaggio e-mail"
 
-#: config_form:58
-msgid "The beginning of the notification message sent to the recipients."
-msgstr "L'inizio del messaggio di notifica inviato ai destinatari."
+#: config_form.php:58
+#: config_form.php:98
+#: config_form.php:139
+msgid ""
+"The notification message to be sent to recipients. User can insert any of the following fields "
+"(within curly braces) in the text, as many times as they want; they will be substituted by the "
+"actual values when the message is sent: %s'"
+msgstr ""
+"Il messaggio di notifica che verrà inviato ai destinatari. L'utente può inserire qualunque dei "
+"seguenti campi modulo (compres tra parentesi graffe) nel testo, quante volte vuole; verranno "
+"sostituiti dai valori attuali al momento della spedizione del messaggio: $s'"
 
-#: config_form:66
+#: config_form.php:66
 msgid "New Collection addition"
 msgstr "Aggiunta nuova collezione"
 
-#: config_form:74
+#: config_form.php:74
 msgid "If checked, sends a notification every time a new Collection is added."
 msgstr "Se selezionato, fa inviare una notifica ogni volta che una nuova collezione viene aggiunta."
 
-#: config_form:106
+#: config_form.php:106
 msgid "New Exhibit addition"
 msgstr "Aggiunta nuova esposizione"
 
-#: config_form:115
+#: config_form.php:115
 msgid "If checked, sends a notification every time a new Exhibit is added."
 msgstr "Se selezionato, fa inviare una notifica ogni volta che una nuova esposizione viene aggiunta."
 
-#: config_form:149
+#: config_form.php:149
 msgid "Plugin not installed/active"
 msgstr "Plugin non installato/attivo"
 
-#: config_form:153
+#: config_form.php:153
 msgid "The Exhibit Builder plugin is not installed or active. Install and activate the plugin in order to be able to configure notifications for new Exhibits."
 msgstr "Il plugin Exhibit Builder non è installato o attivo. Installare ed attivare il plugin per poter configurare le notifiche per nuove esposizioni."
 
-#: config_form:163
+#: config_form.php:163
 msgid "Recipients"
 msgstr "Destinatari"
 
-#: config_form:103
-msgid "Recipient e-mail address"
-msgstr "Indirizzo e-mail del destinatario"
+#: config_form.php:103
+msgid "Recipient e-mail address(es)"
+msgstr "Indirizzo e-mail destinatario/i"
 
-#: config_form:167
-msgid "The address that will receive the notification."
-msgstr "L'indirizzo che riceverà le notifiche."
+#: config_form.php:167
+msgid "The address(es) that will receive the notification. Multiple addresses must be separated by a comma (,)."
+msgstr "Indirizzo/i che riceverà/nno le notifiche. Indirizzi multipli vanno separati da una virgola (,)."
 
-#: config_form:175
+#: config_form.php:175
 msgid "Notify editors"
-msgstr "Informa i redattori"
+msgstr "Informa redattori"
 
-#: config_form:179
+#: config_form.php:179
 msgid "If checked, system sends a notification of new submissions also to users with editing role."
 msgstr "Se selezionato, il sistema invia una notifica per le nuove aggiunte anche agli utenti con ruolo di redattore."
 
-#: config_form:185
+#: config_form.php:185
 msgid "Alerts"
 msgstr "Avvisi"
 
-#: config_form:189
-msgid "Alert contributor about notification"
-msgstr "Avvisa contributore della notifica"
+#: config_form.php:189
+msgid "Alert contributor"
+msgstr "Avvisa contributore"
 
-#: config_form:193
+#: config_form.php:193
 msgid "If checked, system shows an alert informing contributor about the notification."
-msgstr "Se selezionato, il sistema mostra un avviso che informa il contributore dell'invio delle notifiche."
+msgstr "Se selezionato, il sistema mostra un avviso che informa il contributore dell'invio di notifiche."
