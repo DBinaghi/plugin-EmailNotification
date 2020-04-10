@@ -4,12 +4,16 @@
 
 Plugin for Omeka Classic. Once installed and active, system notifies specific recipients once a new Item and/or Collection and/or Exhibit (if Exhibit Builder plugin is installed and active) is added.
 
-Settings allow to choose who is receiving the notification, to customize the messages sent and whether the system should display information about the notification also for the user who just added the new Item and/or Collection.
+Settings allow to choose who is receiving the notification, to customize the messages sent and whether the system should display information about the notification also for the user who just added the new Item and/or Collection and/or Exhibit.
 
 ## Installation
 Uncompress files and rename plugin folder "EmailNotification".
 
 Then install it like any other Omeka plugin.
+
+## Customizing messages
+Starting from versione 1.3, it's possible to customize the whole message sent to recipient, by using special fields like <b>{item_title}</b> or <b>{collection_public_status}</b>; fields will be substituted by their actual values when sending the notification.
+For instance, if Item "Juliet and Romeo" was added by "John Doe" contributor, the text "A new Item was added by {item_creator} with the title '{item_title}'" would be sent as "A new Item was added by John Doe with the title 'Juliet and Romeo'".
 
 ## Warning
 Use it at your own risk.
