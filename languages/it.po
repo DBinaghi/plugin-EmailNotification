@@ -102,7 +102,7 @@ msgstr "Oggetto dell'e-mail"
 #: config_form.php:46
 #: config_form.php:86
 #: config_form.php:127
-msgid "The subject line for the notification e-mail sent to the recipients."
+msgid "The subject line for the notification e-mail sent to recipients."
 msgstr "L'oggetto dell'e-mail di notifica inviata ai destinatari."
 
 #: config_form.php:54
@@ -115,11 +115,11 @@ msgstr "Messaggio e-mail"
 msgid ""
 "The notification message to be sent to recipients. User can insert any of the following fields "
 "(within curly braces) in the text, as many times as they want; they will be substituted by the "
-"actual values when the message is sent: %s'"
+"actual values when the message is sent: %s"
 msgstr ""
 "Il messaggio di notifica che verrà inviato ai destinatari. L'utente può inserire qualunque dei "
 "seguenti campi modulo (compres tra parentesi graffe) nel testo, quante volte vuole; verranno "
-"sostituiti dai valori attuali al momento della spedizione del messaggio: $s'"
+"sostituiti dai valori attuali al momento della spedizione del messaggio: %s"
 
 #: config_form.php:66
 msgid "New Collection addition"
@@ -127,7 +127,7 @@ msgstr "Aggiunta nuova collezione"
 
 #: config_form.php:74
 msgid "If checked, sends a notification every time a new Collection is added."
-msgstr "Se selezionato, fa inviare una notifica ogni volta che una nuova collezione viene aggiunta."
+msgstr "Se selezionata, fa inviare una notifica ogni volta che una nuova collezione viene aggiunta."
 
 #: config_form.php:106
 msgid "New Exhibit addition"
@@ -135,7 +135,7 @@ msgstr "Aggiunta nuova esposizione"
 
 #: config_form.php:115
 msgid "If checked, sends a notification every time a new Exhibit is added."
-msgstr "Se selezionato, fa inviare una notifica ogni volta che una nuova esposizione viene aggiunta."
+msgstr "Se selezionata, fa inviare una notifica ogni volta che una nuova esposizione viene aggiunta."
 
 #: config_form.php:149
 msgid "Plugin not installed/active"
@@ -163,7 +163,7 @@ msgstr "Informa redattori"
 
 #: config_form.php:179
 msgid "If checked, system sends a notification of new submissions also to users with editing role."
-msgstr "Se selezionato, il sistema invia una notifica per le nuove aggiunte anche agli utenti con ruolo di redattore."
+msgstr "Se selezionata, il sistema invia una notifica per le nuove aggiunte anche agli utenti con ruolo di redattore."
 
 #: config_form.php:185
 msgid "Alerts"
@@ -175,4 +175,4 @@ msgstr "Avvisa contributore"
 
 #: config_form.php:193
 msgid "If checked, system shows an alert informing contributor about the notification."
-msgstr "Se selezionato, il sistema mostra un avviso che informa il contributore dell'invio di notifiche."
+msgstr "Se selezionata, il sistema mostra un avviso che informa il contributore dell'invio di notifiche."
