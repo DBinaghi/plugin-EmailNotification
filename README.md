@@ -1,4 +1,4 @@
-# Email Notification
+# E-mail Notification
 
 ## Description
 
@@ -12,9 +12,11 @@ Uncompress files and rename plugin folder "EmailNotification".
 Then install it like any other Omeka plugin.
 
 ## Customizing messages
-Starting from versione 1.3, it's possible to customize the whole message sent to recipient, by using special fields like <b>{item_title}</b> or <b>{collection_public_status}</b>; fields will be substituted by their actual values when sending the notification.
+Starting from version 1.3, it's possible to customize the whole message sent to recipient, by using special fields like <b>{item_title}</b> or <b>{collection_public_status}</b>; fields will be substituted by their actual values when sending the notification.
+For instance, if Item "Juliet and Romeo" was added by "John Doe" contributor, the text "A new Item was added by {item_creator} with the title '{item_title}'" would be sent as "A new Item was added by John Doe with the title 'Juliet and Romeo'".
 
-For instance, if Item "Juliet and Romeo" was added by "John Doe" contributor, the text "A new Item was added by {item_creator} with the title '{item_title}'" would be sent out as "A new Item was added by John Doe with the title 'Juliet and Romeo'".
+## Notification for Item / Collection / Exhibit made public
+Starting from version 1.4, it's possible to send notification to original owner of an Item / Collection / Exhibit when it's made public.
 
 ## Warning
 Use it at your own risk.
@@ -32,7 +34,7 @@ In consideration of access to the source code and the rights to copy, modify and
 In this respect, the risks associated with loading, using, modifying and/or developing or reproducing the software by the user are brought to the user’s attention, given its Free Software status, which may make it complicated to use, with the result that its use is reserved for developers and experienced professionals having in-depth computer knowledge. Users are therefore encouraged to load and test the suitability of the software as regards their requirements in conditions enabling the security of their systems and/or data to be ensured and, more generally, to use and operate it in the same conditions of security. This Agreement may be freely reproduced and published, provided it is not altered, and that no provisions are either added or removed herefrom.
 
 ## Copyright
-Copyright Daniele Binaghi, 2018-2019
+Copyright Daniele Binaghi, 2018-2021
 
 ## Acknowledgments
 Many thanks to John Flatness and Patrick Murray-John for their <a href="https://forum.omeka.org/t/new-plugin-help-needed-with-users-list-and-permission/6020" target="_blank">help in sorting out user privileges</a>.
