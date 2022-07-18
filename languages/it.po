@@ -95,7 +95,7 @@ msgstr "Salve!"
 
 #: EmailNotificationPlugin.php:365
 msgid "Your %s \"<b>%s</b>\" has just been made public by <b>%s</b>."
-msgstr "Il/la tuo/a %s \"<b>%s</b>\" è appena stato reso pubblico/a da <b>%s</b>."
+msgstr "Il/la tuo/a %s \"<b>%s</b>\" è appena stato reso/a pubblico/a da <b>%s</b>."
 
 #: EmailNotificationPlugin.php:366
 msgid "The %s is now available at the page %s."
