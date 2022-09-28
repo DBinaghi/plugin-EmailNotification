@@ -263,9 +263,13 @@ class EmailNotificationPlugin extends Omeka_Plugin_AbstractPlugin
 
 		if ($recipientAddress != '' || $notifyEditors) {
 			// creates e-mail elements
-			$title = metadata($record, array('Dublin Core', 'Title'));
-			$creator = current_user()->name;
+			if ($type == 'exhibit') {
+				$title = metadata($record, 'title');
+			} else {
+				$title = metadata($record, array('Dublin Core', 'Title'));
+			}
 			$date = metadata($record, 'added');
+			$creator = current_user()->name;
 			$public = ($record->public == 1 ? __('public') : __('private'));
 			$featured = ($record->featured == 1 ? __('is featured') : __('is not featured'));
 
