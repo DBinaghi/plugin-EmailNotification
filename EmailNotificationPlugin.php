@@ -1,9 +1,9 @@
 <?php
 
 /**
- * @version 1.4
+ * @version 1.5
  * @license http://www.gnu.org/licenses/gpl-3.0.txt
- * @copyright Daniele Binaghi, 2018-2021
+ * @copyright Daniele Binaghi, 2018-2026
  * @package EmailNotification
  */
 
@@ -64,7 +64,7 @@ class EmailNotificationPlugin extends Omeka_Plugin_AbstractPlugin
 		delete_option('email_notification_notify_editors');
 		delete_option('email_notification_notify_owner');
 		delete_option('email_notification_notification_alert');
-	 }
+	}
 
 	/**
 	 * Initializes the plugin.
@@ -114,31 +114,7 @@ class EmailNotificationPlugin extends Omeka_Plugin_AbstractPlugin
 	 */
 	public function hookBeforeSaveItem($args)
 	{
-		if (!$args['post'] || $args['insert'] == 1) {
-			// saving new item, so no action is required
-			return;
-		}
-
-		$record = $args['record'];
-		$item = get_record_by_id('Item', $record->id);
-
-		if ($item->public == 1) {
-			// item is already public, so no action is required
-			return;
-		}
-
-		if ($args['post']['public'] == 0) {
-			// item hasn't been made public, so no action is required
-			return;
-		}
-
-		if ($item->owner_id == current_user()->id) {
-			// item has been edited by creator, so no action is required
-			return;
-		}
-
-		// alert creator
-		$this->notifyCreator('item', $item);
+		$this->handleBeforeSave($args, 'item', 'Item');
 	}
 
 	/**
@@ -148,31 +124,7 @@ class EmailNotificationPlugin extends Omeka_Plugin_AbstractPlugin
 	 */
 	public function hookBeforeSaveCollection($args)
 	{
-		if (!$args['post'] || $args['insert'] == 1) {
-			// saving new collection, so no action is required
-			return;
-		}
-
-		$record = $args['record'];
-		$collection = get_record_by_id('Collection', $record->id);
-
-		if ($collection->public == 1) {
-			// collection is already public, so no action is required
-			return;
-		}
-
-		if ($args['post']['public'] == 0) {
-			// collection hasn't been made public, so no action is required
-			return;
-		}
-
-		if ($collection->owner_id == current_user()->id) {
-			// collection has been edited by creator, so no action is required
-			return;
-		}
-
-		// alert creator
-		$this->notifyCreator('collection', $collection);
+		$this->handleBeforeSave($args, 'collection', 'Collection');
 	}
 
 	/**
@@ -182,31 +134,7 @@ class EmailNotificationPlugin extends Omeka_Plugin_AbstractPlugin
 	 */
 	public function hookBeforeSaveExhibit($args)
 	{
-		if (!$args['post'] || $args['insert'] == 1) {
-			// saving new exhibit, so no action is required
-			return;
-		}
-
-		$record = $args['record'];
-		$exhibit = get_record_by_id('Exhibit', $record->id);
-
-		if ($exhibit->public == 1) {
-			// exhibit is already public, so no action is required
-			return;
-		}
-
-		if ($args['post']['public'] == 0) {
-			// exhibit hasn't been made public, so no action is required
-			return;
-		}
-
-		if ($exhibit->owner_id == current_user()->id) {
-			// exhibit has been edited by creator, so no action is required
-			return;
-		}
-
-		// alert creator
-		$this->notifyCreator('exhibit', $exhibit);
+		$this->handleBeforeSave($args, 'exhibit', 'Exhibit');
 	}
 
 	/**
@@ -249,162 +177,212 @@ class EmailNotificationPlugin extends Omeka_Plugin_AbstractPlugin
 	}
 
 	/**
-	 * Creates notification for users.
+	 * Shared logic for before_save hooks.
+	 * Checks conditions and optionally notifies the record creator.
 	 *
-	 * @param string $type
-	 * @param array $record
+	 * FIX OPT-5: eliminates triplication across the three before_save hooks.
+	 * FIX 1:     now correctly checks email_notification_notify_owner option
+	 *            before calling notifyCreator() (was never checked before).
+	 *
+	 * @param array  $args
+	 * @param string $type        lowercase type: 'item', 'collection', 'exhibit'
+	 * @param string $recordClass Omeka record class name: 'Item', 'Collection', 'Exhibit'
 	 */
-	private function notifyUsers($type, $record) {
+	private function handleBeforeSave($args, $type, $recordClass)
+	{
+		if (!$args['post'] || $args['insert'] == 1) {
+			// new record being inserted, no action required
+			return;
+		}
+
+		$record = get_record_by_id($recordClass, $args['record']->id);
+
+		if ($record->public == 1) {
+			// record is already public, no action required
+			return;
+		}
+
+		if ($args['post']['public'] == 0) {
+			// record is not being made public, no action required
+			return;
+		}
+
+		if ($record->owner_id == current_user()->id) {
+			// record is being published by its own creator, no action required
+			return;
+		}
+
+		// FIX 1: notify_owner option was never checked in the original code;
+		// notifyCreator() was always called unconditionally.
+		if (get_option('email_notification_notify_owner')) {
+			$this->notifyCreator($type, $record);
+		}
+	}
+
+	/**
+	 * Creates notification for admin/editor users when a new record is added.
+	 *
+	 * @param string $type   'item', 'collection', or 'exhibit'
+	 * @param object $record Omeka record object
+	 */
+	private function notifyUsers($type, $record)
+	{
 		$recipientAddress = get_option('email_notification_recipient_address');
-		$notifyEditors = get_option('email_notification_notify_editors');
-		$bodyHtml = '';
-		$subject = '';
-		$bMessageSent = false;
+		$notifyEditors    = get_option('email_notification_notify_editors');
+		$bMessageSent     = false;
 
-		if ($recipientAddress != '' || $notifyEditors) {
-			// creates e-mail elements
-			if ($type == 'exhibit') {
-				$title = metadata($record, 'title');
-			} else {
-				$title = metadata($record, array('Dublin Core', 'Title'));
-			}
-			$date = metadata($record, 'added');
-			$creator = current_user()->name;
-			$public = ($record->public == 1 ? __('public') : __('private'));
-			$featured = ($record->featured == 1 ? __('is featured') : __('is not featured'));
+		// Early exits: nobody to notify, or notification not enabled for this type
+		if (!$recipientAddress && !$notifyEditors) {
+			return;
+		}
+		if (!get_option('email_notification_new_' . $type)) {
+			return;
+		}
+		if ($type == 'exhibit' && !plugin_is_active('ExhibitBuilder')) {
+			return;
+		}
 
-			if ($type == 'item' && get_option('email_notification_new_item')) {
-				$subject =  get_option('email_notification_new_item_email_subject');
-				$bodyHtml = get_option('email_notification_new_item_email_message');
-				$url_admin = $_SERVER['HTTP_HOST'] . '/admin/items/show/id/' . $record['id'];
-				$url_public = $_SERVER['HTTP_HOST'] . '/items/show/id' . $record['id'];
-				$collection_title = metadata($record, 'Collection Name');
-				if ($title == '') {
-					$title = __('not provided');
-					$message = __('No title has been provided for the new Item');
-					$flash = Zend_Controller_Action_HelperBroker::getStaticHelper('FlashMessenger');
-					$flash->addMessage($message, 'error');
-				}
-				$fields = array('{item_title}', '{item_creator}', '{item_creation_date}', '{item_collection_title}', '{item_public_status}', '{item_featured_status}', '{item_admin_url}', '{item_public_url}');
-				$values = array($title, $creator, $date, $collection_title, $public, $featured, $url_admin, $url_public);
-				$bodyHtml = str_replace($fields, $values, $bodyHtml);
-			} elseif ($type == 'collection' && get_option('email_notification_new_collection')) {
-				$subject =  get_option('email_notification_new_collection_email_subject');
-				$bodyHtml = get_option('email_notification_new_collection_email_message');
-				$url_admin = $_SERVER['HTTP_HOST'] . '/admin/collections/show/id/' . $record['id'];
-				$url_public = $_SERVER['HTTP_HOST'] . '/collections/show/id' . $record['id'];
-				if ($title == '') {
-					$title = __('not provided');
-					$message = __('No title has been provided for the new Collection.');
-					$flash = Zend_Controller_Action_HelperBroker::getStaticHelper('FlashMessenger');
-					$flash->addMessage($message, 'error');
-				}
-				$fields = array('{collection_title}', '{collection_creator}', '{collection_creation_date}', '{collection_public_status}', '{collection_featured_status}', '{collection_admin_url}', '{collection_public_url}');
-				$values = array($title, $creator, $date, $public, $featured, $url_admin, $url_public);
-				$bodyHtml = str_replace($fields, $values, $bodyHtml);
-			} elseif ($type == 'exhibit' && get_option('email_notification_new_exhibit') && plugin_is_active('ExhibitBuilder')) {
-				$subject =  get_option('email_notification_new_exhibit_email_subject');
-				$bodyHtml = get_option('email_notification_new_exhibit_email_message');
-				$url_admin = $_SERVER['HTTP_HOST'] . '/admin/exhibits/show/id/' . $record['id'];
-				$url_public = $_SERVER['HTTP_HOST'] . '/exhibits/show/id' . $record['id'];
-				if ($title == '') {
-					$title = __('not provided');
-					$message = __('No title has been provided for the new Exhibit.');
-					$flash = Zend_Controller_Action_HelperBroker::getStaticHelper('FlashMessenger');
-					$flash->addMessage($message, 'error');
-				}
-				$fields = array('{exhibit_title}', '{exhibit_creator}', '{exhibit_creation_date}', '{exhibit_public_status}', '{exhibit_featured_status}', '{exhibit_admin_url}', '{exhibit_public_url}');
-				$values = array($title, $creator, $date, $public, $featured, $url_admin, $url_public);
-				$bodyHtml = str_replace($fields, $values, $bodyHtml);
-			}
+		// Build common field values
+		$title    = ($type == 'exhibit')
+			? metadata($record, 'title')
+			: metadata($record, array('Dublin Core', 'Title'));
+		$date     = metadata($record, 'added');
+		$creator  = current_user()->name;
+		$public   = ($record->public   == 1 ? __('public')        : __('private'));
+		$featured = ($record->featured == 1 ? __('is featured')   : __('is not featured'));
 
-			if ($bodyHtml != '' && $subject != '') {
-				$bodyHtml .= '<hr>' . __('This is an automatically generated message - please do not reply directly to this e-mail');
-				if ($recipientAddress != '') {
-					// sends e-mail to recipient address(es)
-					$bMessageSent = $this->sendEmail(explode(',', $recipientAddress), $subject, $bodyHtml);
-				}
+		if ($title == '') {
+			$title = __('not provided');
+			$flash = Zend_Controller_Action_HelperBroker::getStaticHelper('FlashMessenger');
+			$flash->addMessage(__('No title has been provided for the new %s.', __(ucfirst($type))), 'error');
+		}
 
-				if ($notifyEditors) {
-					// sends e-mail to all users with general 'edit' privilege
-					$acl = get_acl();
-					$users = get_db()->getTable('User')->findAll();
-					foreach ($users as $key => $user) {
-						if ($acl->isAllowed($user, new Item, 'edit')) {
-							if ($this->sendEmail($user->email, $subject, $bodyHtml)) $bMessageSent = true;
-						}
+		$subject  = get_option('email_notification_new_' . $type . '_email_subject');
+		$bodyHtml = get_option('email_notification_new_' . $type . '_email_message');
+
+		$url_admin  = absolute_url($type . 's/show/' . $record['id'], 'admin');
+		$url_public = absolute_url($type . 's/show/' . $record['id']);
+
+		// Build placeholder arrays — common to all types
+		$fields = array(
+			'{' . $type . '_title}',
+			'{' . $type . '_creator}',
+			'{' . $type . '_creation_date}',
+			'{' . $type . '_public_status}',
+			'{' . $type . '_featured_status}',
+			'{' . $type . '_admin_url}',
+			'{' . $type . '_public_url}',
+		);
+		$values = array($title, $creator, $date, $public, $featured, $url_admin, $url_public);
+
+		// Extra placeholder only for items: collection title
+		if ($type == 'item') {
+			$collection_title = metadata($record, 'Collection Name');
+			array_splice($fields, 3, 0, array('{item_collection_title}'));
+			array_splice($values, 3, 0, array($collection_title));
+		}
+
+		$bodyHtml = str_replace($fields, $values, $bodyHtml);
+		$bodyHtml .= '<hr>' . __('This is an automatically generated message - please do not reply directly to this e-mail');
+
+		// Send to explicit recipient address(es)
+		if ($recipientAddress) {
+			$bMessageSent = $this->sendEmail(explode(',', $recipientAddress), $subject, $bodyHtml);
+		}
+
+		// Send to all users with edit privilege
+		if ($notifyEditors) {
+			$acl   = get_acl();
+			$users = get_db()->getTable('User')->findAll();
+			foreach ($users as $user) {
+				if ($acl->isAllowed($user, new Item, 'edit')) {
+					if ($this->sendEmail($user->email, $subject, $bodyHtml)) {
+						$bMessageSent = true;
 					}
 				}
-
-				if (get_option('email_notification_message_sent') && $bMessageSent) {
-					// shows alert for new item/collection/exhibit creator
-					$message = __('Admin/editors have been notified about the new addition.');
-					$flash = Zend_Controller_Action_HelperBroker::getStaticHelper('FlashMessenger');
-					$flash->addMessage($message, 'success');
-				}
 			}
+		}
+
+		if (get_option('email_notification_notification_alert') && $bMessageSent) {
+			$flash = Zend_Controller_Action_HelperBroker::getStaticHelper('FlashMessenger');
+			$flash->addMessage(__('Admin/editors have been notified about the new addition.'), 'success');
 		}
 	}
 
 	/**
-	 * Creates notification for creator.
+	 * Creates notification for the original record creator when it is made public.
 	 *
-	 * @param string $type
-	 * @param array $record
+	 * @param string $type   'item', 'collection', or 'exhibit'
+	 * @param object $record Omeka record object
 	 */
-	private function notifyCreator($type, $record) {
-		$bodyHtml = '';
-		$subject = '';
+	private function notifyCreator($type, $record)
+	{
 		$recipientAddress = $record->getOwner()->email;
 
-		if ($recipientAddress != '') {
-			// creates e-mail elements
-			$title = metadata($record, array('Dublin Core', 'Title'));
-			$editor = current_user()->name;
+		if ($recipientAddress == '') {
+			return;
+		}
+
+		$title          = metadata($record, array('Dublin Core', 'Title'));
+		$editor         = current_user()->name;
+		$type_localized = __($type);
+		if (is_array($type_localized)) {
+			$type_localized = $type_localized[0];
+		}
+
+		$subject = __('%s made public', ucfirst($type_localized));
+
+		$url_public = absolute_url($type . 's/show/' . $record['id']);
+
+		$bodyHtml  = '<p>' . __('Hello!') . '</p>';
+		$bodyHtml .= '<p>' . __('Your %s "<b>%s</b>" has just been made public by <b>%s</b>.', $type_localized, $title, $editor) . '</p>';
+		$bodyHtml .= '<p>' . __('The %s is now available at the page %s.', $type_localized, $url_public) . '</p>';
+		$bodyHtml .= '<hr>' . __('This is an automatically generated message - please do not reply directly to this e-mail');
+
+		$bMessageSent = $this->sendEmail($recipientAddress, $subject, $bodyHtml);
+
+		if (get_option('email_notification_notification_alert') && $bMessageSent) {
 			$type_localized = __($type);
-			if (is_array($type_localized)) $type_localized = $type_localized[0];
-			$subject = __('%s made public', ucfirst($type_localized));
-			$url_public = $_SERVER['HTTP_HOST'] . '/' . $type . 's/show/id' . $record['id'];
-			$bodyHtml  = '<p>' . __('Hello!') . '</p>';
-			$bodyHtml .= '<p>' . __('Your %s "<b>%s</b>" has just been made public by <b>%s</b>.', $type_localized, $title, $editor) . '</p>';
-			$bodyHtml .= '<p>' . __('The %s is now available at the page %s.', $type_localized, $url_public) . '</p>';
-
-			if ($bodyHtml != '' && $subject != '') {
-				$bodyHtml .= '<hr>' . __('This is an automatically generated message - please do not reply directly to this e-mail');
-				if ($recipientAddress != '') {
-					// sends e-mail to recipient address
-					$bMessageSent = $this->sendEmail($recipientAddress, $subject, $bodyHtml);
-				}
-
-				if (get_option('email_notification_notification_alert') && $bMessageSent) {
-					// shows alert for publisher
-					$message = __('The owner of the %s has been notified of the publishing.', $type_localized);
-					$flash = Zend_Controller_Action_HelperBroker::getStaticHelper('FlashMessenger');
-					$flash->addMessage($message, 'success');
-				}
+			if (is_array($type_localized)) {
+				$type_localized = $type_localized[0];
 			}
+			$flash = Zend_Controller_Action_HelperBroker::getStaticHelper('FlashMessenger');
+			$flash->addMessage(__('The owner of the %s has been notified of the publishing.', $type_localized), 'success');
 		}
 	}
 
 	/**
-	 * Sends e-mail.
+	 * Sends an HTML e-mail via Zend_Mail.
 	 *
-	 * @param string $recipient
-	 * @param string $subject
-	 * @param string $body
+	 * @param string|array $recipient  Single address or array of addresses
+	 * @param string       $subject
+	 * @param string       $body       HTML body
 	 *
-	 * returns boolean
+	 * @return bool  true on success, false on empty input or send failure
 	 */
-	private function sendEmail($recipient, $subject, $body) {
-		if ($recipient == '' || $subject == '' || $body == '') return false;
+	private function sendEmail($recipient, $subject, $body)
+	{
+		if ($recipient == '' || $subject == '' || $body == '') {
+			return false;
+		}
 
-		$email = new Zend_Mail('utf-8');
-		$email->setFrom(get_option('administrator_email'))
-			->addTo($recipient)
-			->setSubject($subject)
-			->setBodyHtml($body)
-			->addHeader('X-Mailer', 'PHP/' . phpversion())
-			->send();
-		return true;
+		try {
+			$email = new Zend_Mail('utf-8');
+			$email->setFrom(get_option('administrator_email'))
+				->addTo($recipient)
+				->setSubject($subject)
+				->setBodyHtml($body)
+				->addHeader('X-Mailer', 'PHP/' . phpversion())
+				->send();
+			return true;
+		} catch (Exception $e) {
+			_log(
+				'EmailNotification: failed to send email to '
+				. (is_array($recipient) ? implode(', ', $recipient) : $recipient)
+				. ' — ' . $e->getMessage(),
+				Zend_Log::ERR
+			);
+			return false;
+		}
 	}
 }
