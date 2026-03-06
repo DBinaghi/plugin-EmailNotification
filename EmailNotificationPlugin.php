@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @version 1.5
+ * @version 1.6
  * @license http://www.gnu.org/licenses/gpl-3.0.txt
  * @copyright Daniele Binaghi, 2018-2026
  * @package EmailNotification
@@ -381,3 +381,4 @@ class EmailNotificationPlugin extends Omeka_Plugin_AbstractPlugin
 		}
 	}
 }
+
